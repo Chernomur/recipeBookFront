@@ -1,26 +1,44 @@
 import React from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
 
-const Profile = () => {
+const Profile = (props) => {
   return (
-    <StyledProfilePage>
-      <img
-        className="avatar"
-        src="https://sun9-74.userapi.com/impf/c851120/v851120236/74d76/S7RKNX4icvQ.jpg?size=200x0&quality=90&sign=506e2d40a28e6ad1f35dc8a0481a7743&ava=1"
-        alt="user's avatar"
-      />
+    <div>
+      {/* eslint-disable-next-line react/prop-types */}
+      {props.authorisedUser.id === null &&
       <div>
-        <ul>
-          <li>
-            Fullname : Chernom-kun
-          </li>
-          <li>
-            Email : chernomur777@gmail.com
-          </li>
-        </ul>
-
+        <h2>вы не зарегистрированы</h2>
       </div>
-    </StyledProfilePage>
+      }
+      {/* eslint-disable-next-line react/prop-types */}
+      {props.authorisedUser.id !== null &&
+      <StyledProfilePage>
+        <img
+          className="avatar"
+          src="https://sun9-74.userapi.com/impf/c851120/v851120236/74d76/S7RKNX4icvQ.jpg?size=200x0&quality=90&sign=506e2d40a28e6ad1f35dc8a0481a7743&ava=1"
+          alt="user's avatar"
+        />
+        <div>
+          <ul>
+            <li>
+              {/* eslint-disable-next-line react/prop-types */}
+              {props.authorisedUser.fullName}
+            </li>
+            <li>
+              {/* eslint-disable-next-line react/prop-types */}
+              {props.authorisedUser.email}
+            </li>
+            <li>
+              {/* eslint-disable-next-line react/prop-types */}
+              {props.authorisedUser.role}
+            </li>
+          </ul>
+
+        </div>
+      </StyledProfilePage>}
+    </div>
+
   );
 };
 
@@ -40,8 +58,15 @@ const StyledProfilePage = styled.div`
   }
   
   li{
+    text-align: left;
     margin: 15px;
   }
 `;
 
-export default Profile;
+const connectFunction = connect(
+  (state) => ({
+    authorisedUser: state.main.authorisedUser
+  })
+);
+
+export default connectFunction(Profile);

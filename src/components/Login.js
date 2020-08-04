@@ -1,9 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import * as axios from "axios";
-import interceptors from "../utils/interceptors";
-
-interceptors();
+import axios from "api/axios";
+import { NavLink } from "react-router-dom";
 
 class Login extends React.Component {
   constructor(props) {
@@ -11,27 +9,27 @@ class Login extends React.Component {
     this.state = {
       email: null,
       password: null,
-      res: null
+      serverMessage: null
     };
   }
 
   singInClick = async () => {
     try {
-      const response = await axios.post("http://192.168.0.108:3000/auth/singIn",
+      const response = await axios.post(`${axios.defaults.baseURL}/auth/singIn`,
         {
           email: this.state.email,
           password: this.state.password
         });
 
       // console.log("👉 Returned data:", response);
-      if (!response.data.token) {
-        this.setState({ res: response.data });
+      if (!response.token) {
+        this.setState({ serverMessage: response.data });
       } else {
-        this.setState({ res: "Login complete" });
+        this.setState({ serverMessage: "Login complete" });
+        localStorage.setItem("token", response.token);
       }
     } catch (e) {
-      // console.log(`😱 Axios request failed: ${e}`);
-      this.setState({ res: e.response.statusText });
+      this.setState({ serverMessage: e.response.statusText });
     }
   }
 
@@ -46,7 +44,7 @@ class Login extends React.Component {
   render() {
     return (
       <div>
-        {((this.state.res !== "Login complete") && (
+        {((this.state.serverMessage !== "Login complete") && (
           <LoginContainer className="card">
 
             Login:
@@ -56,11 +54,11 @@ class Login extends React.Component {
             <input onChange={this.changePassword} type="password"/>
 
             <button onClick={this.singInClick}>singIn</button>
-            <button>Registration</button>
+            <NavLink to={"registration"}>Registration</NavLink>
           </LoginContainer>
         ))}
-        {this.state.res && <div className="card">
-          {this.state.res}
+        {this.state.serverMessage && <div className="card">
+          {this.state.serverMessage}
         </div>}
       </div>
 

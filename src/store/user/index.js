@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid4";
 import { ADD_USER } from "./actionNames";
 
 const getInitialState = () => ({
@@ -16,7 +15,7 @@ const userReducer = (state = getInitialState(), action) => {
         ...state,
         users: [
           ...state.users, {
-            id: uuidv4(),
+            id: null,
             fullName: action.fullName,
             email: action.email
           }

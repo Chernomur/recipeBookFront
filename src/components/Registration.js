@@ -1,22 +1,21 @@
 import React from "react";
-import axios from "axios";
-
+import axios from "api/axios";
 import styled from "styled-components";
 
 class Registration extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      fullName: null,
-      email: null,
-      password: null,
-      res: null
+      fullName: "",
+      email: "",
+      password: "",
+      serverMessage: null
     };
   }
 
   registrationClick = async () => {
     try {
-      const response = await axios.post("http://192.168.0.108:3000/auth/singUp",
+      const response = await axios.post(`${axios.defaults.baseURL}/auth/singUp`,
         {
           fullName: this.state.fullName,
           email: this.state.email,
@@ -24,14 +23,14 @@ class Registration extends React.Component {
         },
         { headers: this.headers });
 
-      // console.log("👉 Returned data:", response);
-      if (!response.data.token) {
-        this.setState({ res: response.data });
+      if (!response.token) {
+        this.setState({ serverMessage: response.data });
       } else {
-        this.setState({ res: "Registration complete" });
+        this.setState({ serverMessage: "Registration complete" });
+        localStorage.setItem("token", response.token);
       }
     } catch (e) {
-      // console.log(`😱 Axios request failed: ${e}`);
+      this.setState({ serverMessage: e.response.data });
     }
   }
 
@@ -50,7 +49,7 @@ class Registration extends React.Component {
   render() {
     return (
       <div>
-        {(this.state.res !== "Registration complete") &&
+        {(this.state.serverMessage !== "Registration complete") &&
         <RegistrationContainer className="card">
           FullName:
           <input
@@ -81,8 +80,8 @@ class Registration extends React.Component {
             Register
           </button>
         </RegistrationContainer>}
-        {this.state.res && <div className="card">
-          {this.state.res}
+        {this.state.serverMessage && <div className="card">
+          {this.state.serverMessage}
         </div>}
       </div>
 
@@ -91,13 +90,13 @@ class Registration extends React.Component {
 }
 
 const RegistrationContainer = styled.div`
-          div{
-          margin: 10px;
-          }
-          input{
-          margin: auto;
-          max-width: 250px;
-          }
-          `;
+  div{
+   margin: 10px;
+  }
+  input{
+    margin: auto;
+    max-width: 250px;
+  }
+`;
 
 export default Registration;

@@ -35,6 +35,8 @@ const StiledHeader = styled.header`
   background: burlywood;
   padding: 5px 25px 5px 25px ;
   margin-bottom: 25px;
+  border-radius: 38px;
+
   
   .header-logo{
     width: 50px;
