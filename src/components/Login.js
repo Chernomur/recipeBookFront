@@ -9,13 +9,10 @@ import { singInUser } from "store/main/actions";
 import axios from "api/axios";
 
 class Login extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: null,
-      password: null,
-      serverMessage: null
-    };
+  state = {
+    email: null,
+    password: null,
+    serverMessage: null
   }
 
   singInClick = async () => {
@@ -42,59 +39,58 @@ class Login extends React.Component {
     this.setState({ password: event.target.value });
   }
 
+  onInpoutChange = (ev) => {
+    this.setState({ [ev.target.name]: ev.target.value });
+  }
+
   render() {
     return (
       <div>
-        {((this.state.serverMessage !== "Login complete") &&
-          (
-            <LoginContainer className="card">
+        {(this.state.serverMessage !== "Login complete") && (
+          <LoginContainer className="card">
+            Login:
+            <input onChange={this.changeEmail} name="email" />
 
-              Login:
-              <input onChange={this.changeEmail}/>
+            Password:
+            <input
+              onChange={this.changePassword}
+              type="password"
+              name="password"
+            />
 
-              Password:
-              <input
-                onChange={this.changePassword}
-                type="password"
-              />
+            <button
+              onClick={this.singInClick}
+            >
+              singIn
+            </button>
 
-              <button
-                onClick={this.singInClick}
-              >
-                singIn
-              </button>
-
-              <NavLink
-                to={"registration"}
-              >
-                Registration
-              </NavLink>
-            </LoginContainer>
-          ))}
-        {
-          this.state.serverMessage &&
+            <NavLink to={"registration"}>
+              Registration
+            </NavLink>
+          </LoginContainer>
+        )}
+        {this.state.serverMessage && (
           <div className="card">
             {this.state.serverMessage}
           </div>
-        }
+        )}
       </div>
     );
   }
 }
 
 const LoginContainer = styled.div`
-
-  div{
+  div {
     margin: 10px;
   }
   
-  input{
+  input {
     margin: auto;
     max-width: 250px;
   }
   
-  button{
-    margin: 10px auto 10px auto ;
+  button {
+    margin: 10px auto 10px auto;
     max-width: 250px;
   }
   
@@ -105,9 +101,8 @@ Login.propTypes = {
 };
 
 const connectFunction = connect(
-  null, {
-    singInUser
-  }
+  null,
+  { singInUser }
 );
 
 export default connectFunction(Login);

@@ -6,7 +6,7 @@ export default createGlobalStyle`
     background-color: blanchedalmond;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   }
-  .card{
+  .card {
     margin:   auto;
     text-align: center;
     width: 350px;

@@ -1,8 +1,8 @@
 import React from "react";
-import { Route } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
+import { Switch, Route } from "react-router-dom";
 import Profile from "./components/Profile/Profile";
 import Header from "./components/Header";
 import RecipeList from "./components/RecipleList/RecipeList";
@@ -14,28 +14,33 @@ import axios from "./api/axios";
 import { singInUser } from "./store/main/actions";
 
 class App extends React.Component {
-  componentDidMount() {
+  async componentDidMount() {
     try {
-      axios.get(`${axios.defaults.baseURL}/auth/check`)
-        .then((res) => {
-          this.props.singInUser(res);
-        });
+      const { user } = await axios.get(`${axios.defaults.baseURL}/auth/check`);
+
+      this.props.singInUser(user);
     } catch (e) {
       // console.log(`😱 Axios request failed: ${e}`);
     }
   }
 
   // eslint-disable-next-line class-methods-use-this
-  render () {
+  render() {
     return (
-      <div className="App">
-        <Header/>
-        <Route path="/Profile" render={() => <Profile/>}/>
-        <Route path="/EditProfile" render={() => <EditProfile/>}/>
-        <Route path="/RecipeList" render={() => <RecipeList/>}/>
-        <Route path="/Registration" render={() => <Registration/>}/>
-        <Route path="/Login" render={() => <Login/>}/>
-      </div>
+      <>
+        <Header />
+
+        <Switch>
+          <Route path="/Profile" component={Profile} exact />
+          <Route path="/EditProfile" component={EditProfile} exact />
+          <Route path="/RecipeList" component={RecipeList} exact />
+
+          <Route path="/Registration" component={Registration} exact />
+          <Route path="/Login" component={Login} exact />
+
+          <Route path="/" render={() => 404} />
+        </Switch>
+      </>
     );
   }
 }
