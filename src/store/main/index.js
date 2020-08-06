@@ -1,13 +1,9 @@
-import { SING_IN_USER } from "./actionNames";
+import {
+  SING_IN_USER
+} from "./actionNames";
 
 const getInitialState = () => ({
-  authorisedUser: {
-    id: null,
-    role: null,
-    fullName: null,
-    email: null
-  }
-
+  authorisedUser: {}
 });
 
 const mainReducer = (state = getInitialState(), action) => {
@@ -16,13 +12,15 @@ const mainReducer = (state = getInitialState(), action) => {
       return {
         ...state,
         authorisedUser: {
-          id: action.data.id,
+          // eslint-disable-next-line no-underscore-dangle
+          id: action.data._id,
           role: action.data.role,
           fullName: action.data.fullName,
           email: action.data.email
         }
       };
     }
+
     default:
       return state;
   }

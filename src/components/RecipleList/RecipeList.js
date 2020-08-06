@@ -2,15 +2,16 @@ import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { GetAllRecipes } from "store/recipe/actions";
-import RecipleCard from "./RecipleCard";
-import axios from "../../api/axios";
+import axios from "api/axios";
+import { TaskType } from "utils/types";
+import PropTypes from "prop-types";
+import RecipeCard from "./RecipeCard";
 
 class RecipeList extends React.Component {
   componentDidMount() {
     try {
       axios.get(`${axios.defaults.baseURL}/recipe/`)
         .then((res) => {
-          // eslint-disable-next-line react/prop-types
           this.props.GetAllRecipes(res);
         });
     } catch (e) {
@@ -21,21 +22,17 @@ class RecipeList extends React.Component {
   render() {
     return (
       <StyledRecipeListContainer>
-        {/* add propType */}
-        {/* eslint-disable-next-line react/prop-types */}
-        {this.props.recipes.map(({ title, overview, difficulty, cookingTime }) => (
 
-          // eslint-disable-next-line react/jsx-key
-          <RecipleCard
+        {this.props.recipes.map(({ _id, title, overview, difficulty, cookingTime }) => (
+          <RecipeCard
+            key={_id}
             title={title}
             overview={overview}
             difficulty={difficulty}
             cookingTime={cookingTime}
           >
-
-          </RecipleCard>
+          </RecipeCard>
         ))}
-
       </StyledRecipeListContainer>
     );
   }
@@ -62,5 +59,10 @@ const connectFunction = connect(
     GetAllRecipes
   }
 );
+
+RecipeList.propTypes = {
+  recipes: PropTypes.arrayOf(TaskType).isRequired,
+  GetAllRecipes: PropTypes.func.isRequired
+};
 
 export default connectFunction(RecipeList);

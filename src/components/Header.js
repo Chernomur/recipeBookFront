@@ -1,32 +1,73 @@
 import React from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
-const Header = () => {
-  return (
-    <StiledHeader>
+import { singInUser } from "store/main/actions";
+import { storage } from "utils";
 
-      <img className="header-logo" alt={"logo"} src={"https://image.flaticon.com/icons/svg/3202/3202822.svg"}/>
-      <input placeholder="search recipes" type="text"/>
-      <ul>
-        <li>
-          <NavLink to="/RecipeList">Favorite</NavLink>
-        </li>
-        <li>
-          <NavLink to="/profile">Profile</NavLink>
-        </li>
-        <li>
-          <NavLink to="/login">login</NavLink>
-        </li>
-        <li>
-          <NavLink to="/registration">registration</NavLink>
-        </li>
+class Header extends React.Component {
+  logOut = () => {
+    this.props.singInUser({});
+    storage.token.set(null);
+  }
 
-      </ul>
-
-    </StiledHeader>
-  );
-};
+  render() {
+    return (
+      <StiledHeader>
+        <img
+          className="header-logo"
+          alt={"logo"}
+          src={"https://image.flaticon.com/icons/svg/3202/3202822.svg"}
+        />
+        <input placeholder="search recipes"/>
+        <ul>
+          <li>
+            {
+              this.props.authorisedUser.id &&
+              <NavLink to="/RecipeList">
+                Favorite
+              </NavLink>
+            }
+          </li>
+          <li>
+            {
+              this.props.authorisedUser.id &&
+              <NavLink to="/profile">
+                Profile
+              </NavLink>
+            }
+          </li>
+          <li>
+            {
+              this.props.authorisedUser.id &&
+              <button onClick={this.logOut}>
+                logOut
+              </button>
+            }
+          </li>
+          <li>
+            {
+              !this.props.authorisedUser.id &&
+              <NavLink to="/login">
+                login
+              </NavLink>
+            }
+          </li>
+          <li>
+            {
+              !this.props.authorisedUser.id &&
+              <NavLink to="/registration">
+                registration
+              </NavLink>
+            }
+          </li>
+        </ul>
+      </StiledHeader>
+    );
+  }
+}
 
 const StiledHeader = styled.header`
   display: flex;
@@ -36,21 +77,33 @@ const StiledHeader = styled.header`
   padding: 5px 25px 5px 25px ;
   margin-bottom: 25px;
   border-radius: 38px;
-
   
   .header-logo{
     width: 50px;
   }
   
   li{
-  margin-left: 10px;
-  display: inline;
+    margin-left: 10px;
+    display: inline;
   }
   
   input{
-  width: 500px;
-  height: 20px;
+    width: 500px;
+    height: 20px;
   }
 `;
 
-export default Header;
+const connectFunction = connect(
+  (state) => ({
+    authorisedUser: state.main.authorisedUser
+  }), {
+    singInUser
+  }
+);
+
+Header.propTypes = {
+  authorisedUser: PropTypes.object.isRequired,
+  singInUser: PropTypes.func.isRequired
+};
+
+export default connectFunction(Header);

@@ -1,7 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import axios from "api/axios";
 import { NavLink } from "react-router-dom";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+
+import { storage } from "utils";
+import { singInUser } from "store/main/actions";
+import axios from "api/axios";
 
 class Login extends React.Component {
   constructor(props) {
@@ -20,14 +25,10 @@ class Login extends React.Component {
           email: this.state.email,
           password: this.state.password
         });
+      this.setState({ serverMessage: "Login complete" });
+      storage.token.set(response.token);
 
-      // console.log("👉 Returned data:", response);
-      if (!response.token) {
-        this.setState({ serverMessage: response.data });
-      } else {
-        this.setState({ serverMessage: "Login complete" });
-        localStorage.setItem("token", response.token);
-      }
+      this.props.singInUser(response.user);
     } catch (e) {
       this.setState({ serverMessage: e.response.statusText });
     }
@@ -44,24 +45,39 @@ class Login extends React.Component {
   render() {
     return (
       <div>
-        {((this.state.serverMessage !== "Login complete") && (
-          <LoginContainer className="card">
+        {((this.state.serverMessage !== "Login complete") &&
+          (
+            <LoginContainer className="card">
 
-            Login:
-            <input onChange={this.changeEmail} type="text"/>
+              Login:
+              <input onChange={this.changeEmail}/>
 
-            Password:
-            <input onChange={this.changePassword} type="password"/>
+              Password:
+              <input
+                onChange={this.changePassword}
+                type="password"
+              />
 
-            <button onClick={this.singInClick}>singIn</button>
-            <NavLink to={"registration"}>Registration</NavLink>
-          </LoginContainer>
-        ))}
-        {this.state.serverMessage && <div className="card">
-          {this.state.serverMessage}
-        </div>}
+              <button
+                onClick={this.singInClick}
+              >
+                singIn
+              </button>
+
+              <NavLink
+                to={"registration"}
+              >
+                Registration
+              </NavLink>
+            </LoginContainer>
+          ))}
+        {
+          this.state.serverMessage &&
+          <div className="card">
+            {this.state.serverMessage}
+          </div>
+        }
       </div>
-
     );
   }
 }
@@ -84,4 +100,14 @@ const LoginContainer = styled.div`
   
 `;
 
-export default Login;
+Login.propTypes = {
+  singInUser: PropTypes.func.isRequired
+};
+
+const connectFunction = connect(
+  null, {
+    singInUser
+  }
+);
+
+export default connectFunction(Login);
