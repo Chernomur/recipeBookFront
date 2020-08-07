@@ -8,13 +8,13 @@ const Profile = (props) => {
   return (
     <div>
       {
-        !props.authorisedUser.id &&
+        !props.user.id &&
         <div>
           <h2>вы не зарегистрированы</h2>
         </div>
       }
       {
-        props.authorisedUser.id &&
+        props.user.id &&
         <StyledProfilePage>
           <img
             className="avatar"
@@ -24,15 +24,15 @@ const Profile = (props) => {
 
           <div>
             <div>
-              {props.authorisedUser.fullName}
+              {props.user.fullName}
             </div>
 
             <div>
-              {props.authorisedUser.email}
+              {props.user.email}
             </div>
 
           </div>
-          <NavLink to={"EditProfile"}>
+          <NavLink to={"edit-profile"}>
             EditProfile
           </NavLink>
         </StyledProfilePage>
@@ -64,12 +64,12 @@ const StyledProfilePage = styled.div`
 
 const connectFunction = connect(
   (state) => ({
-    authorisedUser: state.main.authorisedUser
+    user: state.main.user
   }), { }
 );
 
 Profile.propTypes = {
-  authorisedUser: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired
 };
 
 export default connectFunction(Profile);

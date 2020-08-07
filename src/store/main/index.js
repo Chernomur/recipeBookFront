@@ -3,15 +3,15 @@ import {
 } from "./actionNames";
 
 const getInitialState = () => ({
-  authorisedUser: {}
+  user: {}
 });
 
 const mainReducer = (state = getInitialState(), action) => {
   switch (action.type) {
-    case SING_IN_USER: {
+    case SING_IN_USER: { // update
       return {
         ...state,
-        authorisedUser: {
+        user: {
           // eslint-disable-next-line no-underscore-dangle
           id: action.data._id,
           role: action.data.role,

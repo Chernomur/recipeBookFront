@@ -9,12 +9,14 @@ axios.interceptors.request.use((config) => {
   // console.log(config);
   // eslint-disable-next-line no-param-reassign
   config.headers.Authorization = `Bearer ${token}`;
+  // console.log("token: ",token)
   return config;
 });
 
 axios.interceptors.response.use(({ data }) => {
   return data;
 }, (error) => {
+  // console.log(error.response.statusText);
   return Promise.reject(error);
 });
 

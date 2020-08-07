@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import axios from "../../api/axios";
+import axios from "../../../api/axios";
 
 class ImageUpload extends React.Component {
   constructor(props) {

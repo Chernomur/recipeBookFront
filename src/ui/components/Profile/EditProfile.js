@@ -20,8 +20,8 @@ class EditProfile extends React.Component {
   static getDerivedStateFromProps(props, state) {
     if (state.unsavedEmail == null) {
       return {
-        unsavedFullName: props.authorisedUser.fullName,
-        unsavedEmail: props.authorisedUser.email
+        unsavedFullName: props.user.fullName,
+        unsavedEmail: props.user.email
       };
     }
     return null;
@@ -29,7 +29,7 @@ class EditProfile extends React.Component {
 
   updateUserInfo = async () => {
     try {
-      const response = await axios.patch(`http://localhost:4000/user/${this.props.authorisedUser.id}`,
+      const response = await axios.patch(`http://localhost:4000/user/${this.props.user.id}`,
         {
           fullName: this.state.unsavedFullName,
           email: this.state.unsavedEmail
@@ -53,21 +53,23 @@ class EditProfile extends React.Component {
 
   render() {
     return (
-      <div>
+      <>
         {
-          !this.props.authorisedUser.id &&
+          !this.props.user.id &&
           <div>
             <h2>вы не зарегистрированы</h2>
           </div>
         }
         {
-          this.props.authorisedUser.id &&
-          <StyledProfilePage>
+          this.props.user.id &&
+          <EditProfileForm
+            onSubmit={this.updateUserInfo}
+          >
             <div>
 
               <div>
                 Change avatar:
-                <ImageUpload/>
+                <ImageUpload />
                 <img
                   className="avatar"
                   src="https://icons-for-free.com/iconfiles/png/512/avatar+human+male+man+people+person+profile+user+users+icon-1320190727966457290.png"
@@ -80,6 +82,7 @@ class EditProfile extends React.Component {
                 <input
                   value={this.state.unsavedFullName}
                   onChange={this.changeFullName}
+                  name="Fullname"
                 />
               </div>
 
@@ -87,19 +90,20 @@ class EditProfile extends React.Component {
                 Change Email:
                 <input
                   value={this.state.unsavedEmail}
+                  name="email"
                   onChange={this.changeEmail}
                 />
               </div>
 
               <div>
                 Change Password:
-                <input/>
+                <input name="password" />
               </div>
 
               <div>
-                <button onClick={this.updateUserInfo}>
-                  Save changes
-                </button>
+                <input
+                  type="submit"
+                  value="Save changes" />
               </div>
 
               {
@@ -109,14 +113,14 @@ class EditProfile extends React.Component {
                 </div>
               }
             </div>
-          </StyledProfilePage>
+          </EditProfileForm>
         }
-      </div>
+      </>
     );
   }
 }
 
-const StyledProfilePage = styled.div`
+const EditProfileForm = styled.form`
   display: flex;
   background: indianred;
   padding: 15px;
@@ -132,7 +136,7 @@ const StyledProfilePage = styled.div`
 
 const connectFunction = connect(
   (state) => ({
-    authorisedUser: state.main.authorisedUser,
+    user: state.main.user,
     editableContent: state.main.editableContent
   }), {
     singInUser
@@ -140,7 +144,7 @@ const connectFunction = connect(
 );
 
 EditProfile.propTypes = {
-  authorisedUser: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
   singInUser: PropTypes.func.isRequired
 };
 

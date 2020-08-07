@@ -3,12 +3,12 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import { Switch, Route } from "react-router-dom";
-import Profile from "./components/Profile/Profile";
-import Header from "./components/Header";
-import RecipeList from "./components/RecipleList/RecipeList";
-import Registration from "./components/Registration";
-import Login from "./components/Login";
-import EditProfile from "./components/Profile/EditProfile";
+import Profile from "./ui/components/Profile/Profile";
+import Header from "./ui/components/Header";
+import RecipeList from "./ui/components/RecipleList/RecipeList";
+import Registration from "./ui/components/Registration";
+import Login from "./ui/components/Login";
+import EditProfile from "./ui/components/Profile/EditProfile";
 
 import axios from "./api/axios";
 import { singInUser } from "./store/main/actions";
@@ -16,8 +16,7 @@ import { singInUser } from "./store/main/actions";
 class App extends React.Component {
   async componentDidMount() {
     try {
-      const { user } = await axios.get(`${axios.defaults.baseURL}/auth/check`);
-
+      const user = await axios.get(`${axios.defaults.baseURL}/auth/check`);
       this.props.singInUser(user);
     } catch (e) {
       // console.log(`😱 Axios request failed: ${e}`);
@@ -31,12 +30,12 @@ class App extends React.Component {
         <Header />
 
         <Switch>
-          <Route path="/Profile" component={Profile} exact />
-          <Route path="/EditProfile" component={EditProfile} exact />
-          <Route path="/RecipeList" component={RecipeList} exact />
+          <Route path="/profile" component={Profile} exact />
+          <Route path="/edit-profile" component={EditProfile} exact />
+          <Route path="/recipe-list" component={RecipeList} exact />
 
-          <Route path="/Registration" component={Registration} exact />
-          <Route path="/Login" component={Login} exact />
+          <Route path="/registration" component={Registration} exact />
+          <Route path="/login" component={Login} exact />
 
           <Route path="/" render={() => 404} />
         </Switch>
