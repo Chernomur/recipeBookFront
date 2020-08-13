@@ -1,66 +1,68 @@
 import React from "react";
 import styled from "styled-components";
-import { NavLink } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { singIn } from "api/authApi";
+import { NavLink } from "react-router-dom";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { storage } from "utils";
-import { singInUser } from "store/main/actions";
-import axios from "api/axios";
+import { updateUser } from "store/main/actions";
 
 class Login extends React.Component {
   state = {
-    email: null,
-    password: null,
-    serverMessage: null
-  }
+    email: "",
+    password: "",
+    errorMessage: null,
+    errorField: null,
+  };
 
   singInClick = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(`${axios.defaults.baseURL}/auth/singIn`,
-        {
-          email: this.state.email,
-          password: this.state.password
-        });
-      this.setState({ serverMessage: "Login complete" });
+      const response = await singIn({
+        email: this.state.email,
+        password: this.state.password,
+      });
+      this.setState({ errorMessage: "Login complete" });
       storage.token.set(response.token);
 
-      this.props.singInUser(response.user);
+      this.props.updateUser(response.user);
     } catch (e) {
-      this.setState({ serverMessage: e.response.data });
+      this.setState({ errorMessage: e.response.data.message });
+      this.setState({ errorField: e.response.data.field });
     }
-  }
+  };
 
   onInputChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
-  }
+  };
 
   render() {
-    if (this.props.user.id) {
-      // eslint-disable-next-line react/prop-types
-      this.props.history.push("/profile");
-    }
     return (
       <>
-
-        {(this.state.serverMessage !== "Login complete") && (
-          <LoginForm
-            onSubmit={this.singInClick}
-            className="card">
+        {this.state.errorMessage !== "Login complete" && (
+          <LoginForm onSubmit={this.singInClick} className="card">
             <TextField
-              error={this.state.serverMessage === "Not Found"}
-              label={(this.state.serverMessage === "Not Found" && "неверный логин") || "Login"}
+              error={this.state.errorField === "email"}
+              label="Email"
+              helperText={
+                this.state.errorField === "email" ? this.state.errorMessage : ""
+              }
               className="text-field"
               onChange={this.onInputChange}
               name="email"
             />
 
             <TextField
-              error={this.state.serverMessage === "invalid password"}
-              label={(this.state.serverMessage === "invalid password" && "неверный пароль") || "Password"}
+              error={this.state.errorField === "password"}
+              label="Password"
+              helperText={
+                this.state.errorField === "password"
+                  ? this.state.errorMessage
+                  : ""
+              }
               className="text-field"
               name="password"
               onChange={this.onInputChange}
@@ -74,8 +76,11 @@ class Login extends React.Component {
               color="primary"
               type="submit"
               value="login"
-            > login</Button>
-            <NavLink to={" registration"}>
+            >
+              {" "}
+              login
+            </Button>
+            <NavLink className="reg-link" to={"registration"}>
               Registration
             </NavLink>
           </LoginForm>
@@ -86,29 +91,30 @@ class Login extends React.Component {
 }
 
 const LoginForm = styled.form`
+  .text-field {
+    margin: 5px auto;
+    max-width: 250px;
+  }
 
- .text-field {
-   margin: 5px auto;
-   max-width: 250px;
- }
- 
- .login-button {
-  margin: auto;
-  width: 120px;
- }
- 
+  .login-button {
+    margin: 15px auto 5px;
+    width: 120px;
+  }
+
+  .reg-link {
+    margin: 10px;
+  }
 `;
 
 Login.propTypes = {
-  singInUser: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired
+  updateUser: PropTypes.func.isRequired,
 };
 
 const connectFunction = connect(
   (state) => ({
-    user: state.main.user
+    user: state.main.user,
   }),
-  { singInUser }
+  { updateUser }
 );
 
 export default connectFunction(Login);

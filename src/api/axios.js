@@ -13,11 +13,14 @@ axios.interceptors.request.use((config) => {
   return config;
 });
 
-axios.interceptors.response.use(({ data }) => {
-  return data;
-}, (error) => {
-  // console.log(error.response.statusText);
-  return Promise.reject(error);
-});
+axios.interceptors.response.use(
+  ({ data }) => {
+    return data;
+  },
+  (error) => {
+    // console.log(error.response);
+    return Promise.reject(error);
+  }
+);
 
 export default axios;

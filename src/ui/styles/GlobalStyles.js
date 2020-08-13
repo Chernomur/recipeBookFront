@@ -3,8 +3,14 @@ import { createGlobalStyle } from "styled-components";
 export default createGlobalStyle`
   html {
     text-align: center;
-    background-color: blanchedalmond;
+    background-color: white;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+
+
+  body{
+    max-width: 1080px;
+    margin: auto;
   }
   .card {
     margin:   auto;

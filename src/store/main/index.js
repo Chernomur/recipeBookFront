@@ -1,14 +1,13 @@
-import {
-  SING_IN_USER
-} from "./actionNames";
+import { UPDATE_USER } from "./actionNames";
 
 const getInitialState = () => ({
-  user: {}
+  user: {},
 });
 
 const mainReducer = (state = getInitialState(), action) => {
   switch (action.type) {
-    case SING_IN_USER: { // update
+    case UPDATE_USER: {
+      // update
       return {
         ...state,
         user: {
@@ -16,8 +15,9 @@ const mainReducer = (state = getInitialState(), action) => {
           id: action.data._id,
           role: action.data.role,
           fullName: action.data.fullName,
-          email: action.data.email
-        }
+          email: action.data.email,
+          avatar: action.data.avatar,
+        },
       };
     }
 

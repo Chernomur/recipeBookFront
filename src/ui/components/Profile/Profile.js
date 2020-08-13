@@ -2,74 +2,67 @@ import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { NavLink } from "react-router-dom";
+import { Paper, Button } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
-const Profile = (props) => {
-  return (
-    <div>
-      {
-        !props.user.id &&
-        <div>
-          <h2>вы не зарегистрированы</h2>
-        </div>
-      }
-      {
-        props.user.id &&
-        <StyledProfilePage>
-          <img
-            className="avatar"
-            src="https://icons-for-free.com/iconfiles/png/512/avatar+human+male+man+people+person+profile+user+users+icon-1320190727966457290.png"
-            alt="user's avatar"
-          />
+class Profile extends React.Component {
+  render() {
+    return (
+      <>
+        {this.props.user.id && (
+          <StyledProfilePage>
+            <Paper className="paper" elevation={3}>
+              <img
+                className="avatar"
+                src={this.props.user.avatar}
+                alt="user's avatar"
+              />
 
-          <div>
-            <div>
-              {props.user.fullName}
-            </div>
+              <div>
+                <div>
+                  <h3> {this.props.user.fullName}</h3>
+                </div>
 
-            <div>
-              {props.user.email}
-            </div>
-
-          </div>
-          <NavLink to={"edit-profile"}>
-            EditProfile
-          </NavLink>
-        </StyledProfilePage>
-      }
-    </div>
-  );
-};
+                <div>
+                  <h4>{this.props.user.email}</h4>
+                </div>
+              </div>
+              <Link className="edit-profile-button" to={"edit-profile"}>
+                <Button variant="contained" color="secondary">
+                  Edit Profile
+                </Button>
+              </Link>
+            </Paper>
+          </StyledProfilePage>
+        )}
+      </>
+    );
+  }
+}
 
 const StyledProfilePage = styled.div`
-  display: flex;
-  background: indianred;
-  padding: 15px;
-  
-  .avatar{
+  .paper {
+    padding: 10px;
+    margin: auto;
+    background-color: whitesmoke;
+    max-width: 380px;
+  }
+
+  .edit-profile-button {
+    text-decoration: none;
+  }
+
+  .avatar {
     width: 150px;
-  }
-  
-  ul{
-    padding: 0;
-    margin: 0;
-    list-style: none;
-  }
-  
-  li{
-    text-align: left;
-    margin: 15px;
   }
 `;
 
-const connectFunction = connect(
-  (state) => ({
-    user: state.main.user
-  }), { }
-);
+const connectFunction = connect((state) => ({
+  user: state.main.user,
+}));
 
 Profile.propTypes = {
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
 };
 
 export default connectFunction(Profile);

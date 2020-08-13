@@ -3,11 +3,12 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
-import axios from "api/axios";
 import { storage } from "utils";
-import { singInUser } from "store/main/actions";
+import { updateUser } from "store/main/actions";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import { NavLink } from "react-router-dom";
+import { singUp } from "api/authApi";
 
 class Registration extends React.Component {
   constructor(props) {
@@ -17,131 +18,162 @@ class Registration extends React.Component {
       email: "",
       password: "",
       passwordConfirm: "",
-      serverMessage: null
+      errorMessage: null,
+      errorField: null,
     };
   }
 
   registrationClick = async (event) => {
     event.preventDefault();
     if (this.state.passwordConfirm !== this.state.password) {
-      this.setState({ serverMessage: "Password mismatch" });
+      this.setState({ errorMessage: "Password mismatch" });
       return;
     }
     try {
-      const response = await axios.post(`${axios.defaults.baseURL}/auth/singUp`,
-        {
-          fullName: this.state.fullName,
-          email: this.state.email,
-          password: this.state.password
-        });
+      const response = await singUp({
+        fullName: this.state.fullName,
+        email: this.state.email,
+        password: this.state.password,
+      });
 
-      this.setState({ serverMessage: "Registration complete" });
+      this.setState({ errorMessage: "Registration complete" });
       storage.token.set(response.token);
-      this.props.singInUser(response.user);
+      this.props.updateUser(response.user);
     } catch (e) {
-      this.setState({ serverMessage: e.response.data });
+      // console.log(e);
+      this.setState({ errorMessage: e.response.data.message });
+      this.setState({ errorField: e.response.data.field });
     }
-  }
+  };
 
   validateEmail = () => {
-    if (this.state.serverMessage === "this email is already in use") {
+    if (this.state.errorMessage === "this email is already in use") {
       return "this email is already in use";
     }
-    if (this.state.serverMessage === "invalid e-mail") {
+    if (this.state.errorMessage === "invalid e-mail") {
       return "invalid e-mail";
     }
     return "E-mail";
-  }
+  };
 
   onInputChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
-  }
+  };
 
   render() {
     if (this.props.user.id) {
       // eslint-disable-next-line react/prop-types
       this.props.history.push("/profile");
     }
+
     return (
       <>
-        {(this.state.serverMessage !== "Registration complete") &&
-        <RegistrationForm
-          onSubmit={this.registrationClick}
-          className="card">
+        {this.state.errorMessage !== "Registration complete" && (
+          <RegistrationForm onSubmit={this.registrationClick} className="card">
+            <TextField
+              error={this.state.errorField === "fullName"}
+              label="Login"
+              helperText={
+                this.state.errorField === "fullName"
+                  ? this.state.errorMessage
+                  : ""
+              }
+              className="text-field"
+              name="fullName"
+              value={this.state.fullName}
+              onChange={this.onInputChange}
+            />
 
-          <TextField
-            error={this.state.serverMessage === "invalid fullName"}
-            label={(this.state.serverMessage === "invalid fullName" && "invalid login") || "Login"}
-            className="text-field"
-            name="fullName"
-            value={this.state.fullName}
-            onChange={this.onInputChange}
-          />
+            <TextField
+              error={this.state.errorField === "email"}
+              label="Email"
+              helperText={
+                this.state.errorField === "email" ? this.state.errorMessage : ""
+              }
+              className="text-field"
+              name="email"
+              type="email"
+              value={this.state.email}
+              onChange={this.onInputChange}
+            />
 
-          <TextField
-            error={this.state.serverMessage === "invalid e-mail" || this.state.serverMessage === "this email is already in use"}
-            label={this.validateEmail()}
-            className="text-field"
-            name="email"
-            type="email"
-            value={this.state.email}
-            onChange={this.onInputChange} />
+            <TextField
+              error={this.state.errorField === "password"}
+              label="Password"
+              helperText={
+                this.state.errorField === "password"
+                  ? this.state.errorMessage
+                  : ""
+              }
+              className="text-field"
+              name="password"
+              type="password"
+              value={this.state.password}
+              onChange={this.onInputChange}
+            />
 
-          <TextField
-            error={this.state.serverMessage === "invalid password"}
-            label={(this.state.serverMessage === "invalid password" && "invalid password") || "Password"}
-            className="text-field"
-            name="password"
-            type="password"
-            value={this.state.password}
-            onChange={this.onInputChange} />
+            <TextField
+              error={this.state.errorMessage === "Password mismatch"}
+              label="Password confirmation"
+              helperText={
+                this.state.errorMessage === "Password mismatch"
+                  ? this.state.errorMessage
+                  : ""
+              }
+              className="text-field"
+              name="passwordConfirm"
+              type="password"
+              value={this.state.passwordConfirm}
+              onChange={this.onInputChange}
+            />
 
-          <TextField
-            error={this.state.serverMessage === "Password mismatch"}
-            label={(this.state.serverMessage === "Password mismatch" && "Password mismatch") || "Password confirmation"}
-            className="text-field"
-            name="passwordConfirm"
-            type="password"
-            value={this.state.passwordConfirm}
-            onChange={this.onInputChange} />
+            <Button
+              className="reg-button"
+              variant="contained"
+              color="primary"
+              type="submit"
+              value="login"
+            >
+              Register
+            </Button>
 
-          <Button
-            className="reg-button"
-            variant="contained"
-            color="primary"
-            type="submit"
-            value="login"
-          > Registration</Button>
-
-        </RegistrationForm>}
+            <NavLink className="sing-in-link" to={"login"}>
+              sing in
+            </NavLink>
+          </RegistrationForm>
+        )}
       </>
     );
   }
 }
 
 const RegistrationForm = styled.form`
-
   .text-field {
-   margin: 5px auto;
-   max-width: 250px;
+    margin: 5px auto;
+    max-width: 250px;
   }
- 
+
   .reg-button {
     margin: 5px auto;
     width: 120px;
   }
+
+  .sing-in-link {
+    margin: 10px;
+  }
 `;
 
 Registration.propTypes = {
-  singInUser: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired
+  updateUser: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 };
 
 const connectFunction = connect(
   (state) => ({
-    user: state.main.user
-  }), {
-    singInUser
+    user: state.main.user,
+  }),
+  {
+    updateUser,
   }
 );
 
