@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { Paper, Button } from "@material-ui/core";
+import { Paper, Button, Avatar } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
 class Profile extends React.Component {
@@ -12,7 +12,7 @@ class Profile extends React.Component {
         {this.props.user.id && (
           <StyledProfilePage>
             <Paper className="paper" elevation={3}>
-              <img
+              <Avatar
                 className="avatar"
                 src={this.props.user.avatar}
                 alt="user's avatar"
@@ -54,6 +54,7 @@ const StyledProfilePage = styled.div`
 
   .avatar {
     width: 150px;
+    height: 150px;
   }
 `;
 
