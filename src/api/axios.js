@@ -10,13 +10,13 @@ axios.interceptors.request.use((config) => {
   // eslint-disable-next-line no-param-reassign
   config.headers.Authorization = `Bearer ${token}`;
   // console.log("token: ",token)
-  console.log("config: ", config);
+  // console.log("config: ", config);
   return config;
 });
 
 axios.interceptors.response.use(
   ({ data }) => {
-    console.log(data);
+    // console.log(data);
     return data;
   },
   (error) => {
