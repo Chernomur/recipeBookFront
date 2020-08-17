@@ -16,16 +16,18 @@ class EditProfile extends React.Component {
     this.state = {
       unsavedFullName: null,
       unsavedEmail: null,
+
+      changePassword: false,
+      isRequired: false,
       oldPassword: null,
       newPassword: null,
       passwordConfirm: null,
+
       errorMessage: null,
       errorField: null,
 
       file: null,
       fileURL: null,
-
-      changePassword: false,
     };
   }
 
@@ -41,12 +43,9 @@ class EditProfile extends React.Component {
 
   updateUserInfo = async (event) => {
     event.preventDefault();
-    // if (
-    //   this.state.passwordConfirm ||
-    //   this.state.newPassword ||
-    //   this.state.oldPassword
-    // ) {
-    // }
+
+    this.setState({ errorMessage: null, errorField: null });
+
     if (this.state.passwordConfirm !== this.state.newPassword) {
       this.setState({ errorMessage: "Password mismatch" });
       return;
@@ -89,8 +88,23 @@ class EditProfile extends React.Component {
     this.setState({ file: fd });
   };
 
+  isRequiredHandler = () => {
+    if (
+      this.state.passwordConfirm ||
+      this.state.newPassword ||
+      this.state.oldPassword
+    ) {
+      this.setState({ isRequired: true });
+    } else {
+      this.setState({ isRequired: false });
+    }
+  };
+
   onInputChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
+    this.setState(
+      { [event.target.name]: event.target.value },
+      this.isRequiredHandler
+    );
   };
 
   clickOnRef = () => {
@@ -99,6 +113,14 @@ class EditProfile extends React.Component {
 
   showChangePassword = () => {
     this.setState({ changePassword: !this.state.changePassword });
+    this.setState(
+      {
+        oldPassword: null,
+        newPassword: null,
+        passwordConfirm: null,
+      },
+      this.isRequiredHandler
+    );
   };
 
   render() {
@@ -177,6 +199,7 @@ class EditProfile extends React.Component {
                 {this.state.changePassword && (
                   <div className="change-password">
                     <TextField
+                      required={this.state.isRequired}
                       className="passwords"
                       onChange={this.onInputChange}
                       label="Old Password"
@@ -189,6 +212,7 @@ class EditProfile extends React.Component {
                       name="oldPassword"
                     />
                     <TextField
+                      required={this.state.isRequired}
                       className="passwords"
                       onChange={this.onInputChange}
                       label="New Password"
@@ -202,6 +226,7 @@ class EditProfile extends React.Component {
                     />
 
                     <TextField
+                      required={this.state.isRequired}
                       className="passwords"
                       onChange={this.onInputChange}
                       label="Password confirmation"

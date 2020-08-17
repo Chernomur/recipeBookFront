@@ -12,11 +12,7 @@ class Profile extends React.Component {
         {this.props.user.id && (
           <StyledProfilePage>
             <Paper className="paper" elevation={3}>
-              <Avatar
-                className="avatar"
-                src={this.props.user.avatar}
-                alt="user's avatar"
-              />
+              <Avatar className="avatar" src={this.props.user.avatar}></Avatar>
 
               <div>
                 <div>
@@ -53,6 +49,7 @@ const StyledProfilePage = styled.div`
   }
 
   .avatar {
+    margin: auto;
     width: 150px;
     height: 150px;
   }
