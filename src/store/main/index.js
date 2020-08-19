@@ -11,7 +11,7 @@ const mainReducer = (state = getInitialState(), action) => {
         ...state,
         user: {
           // eslint-disable-next-line no-underscore-dangle
-          id: action.data._id,
+          id: action.data.id,
           role: action.data.role,
           fullName: action.data.fullName,
           email: action.data.email,

@@ -11,17 +11,15 @@ import * as serviceWorker from "serviceWorker";
 import { store } from "store";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <>
-          <GlobalStyles />
+  <Provider store={store}>
+    <BrowserRouter>
+      <>
+        <GlobalStyles />
 
-          <App />
-        </>
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>,
+        <App />
+      </>
+    </BrowserRouter>
+  </Provider>,
   document.getElementById("root")
 );
 

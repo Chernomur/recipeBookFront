@@ -2,19 +2,19 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
-const RecipeCard = ({ title, overview, difficulty, cookingTime }) => {
+const RecipeCard = ({ title, description, difficulty, cookingTime }) => {
   return (
     <StyledRecipeCard>
       <div className="card-info-container">
         <h4>{title}</h4>
 
-        <div className="overview">
-          <p>{overview}</p>
+        <div className="description">
+          <p>{description}</p>
         </div>
 
         <div className="cooking-information">
-          {difficulty}
-          {cookingTime} мин.
+          <span> {difficulty} / 10</span>
+          <span> {cookingTime} мин.</span>
         </div>
       </div>
     </StyledRecipeCard>
@@ -45,13 +45,13 @@ const StyledRecipeCard = styled.div`
     margin: 10px;
   }
 
-  .overview {
+  .description {
     border-radius: 38px;
     margin-left: 10px;
     width: 220px;
     height: 150px;
   }
-  .overview p {
+  .description p {
     display: -webkit-box;
     -webkit-line-clamp: 8;
     -webkit-box-orient: vertical;
@@ -73,8 +73,8 @@ const StyledRecipeCard = styled.div`
 
 RecipeCard.propTypes = {
   title: PropTypes.string.isRequired,
-  overview: PropTypes.string.isRequired,
-  difficulty: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  difficulty: PropTypes.number.isRequired,
   cookingTime: PropTypes.number.isRequired,
 };
 

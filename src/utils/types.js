@@ -5,5 +5,5 @@ export const TaskType = PropTypes.shape({
   title: PropTypes.string,
   overview: PropTypes.string,
   difficulty: PropTypes.string,
-  cookingTime: PropTypes.number
+  cookingTime: PropTypes.number,
 });

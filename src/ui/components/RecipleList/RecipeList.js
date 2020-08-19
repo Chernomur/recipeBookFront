@@ -18,11 +18,11 @@ class RecipeList extends React.Component {
     return (
       <StyledRecipeListContainer>
         {this.props.recipes.map(
-          ({ _id, title, overview, difficulty, cookingTime }) => (
+          ({ id, title, description, difficulty, cookingTime }) => (
             <RecipeCard
-              key={_id}
+              key={id}
               title={title}
-              overview={overview}
+              description={description}
               difficulty={difficulty}
               cookingTime={cookingTime}
             ></RecipeCard>

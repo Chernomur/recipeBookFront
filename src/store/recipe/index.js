@@ -1,7 +1,7 @@
 import { ADD_RECIPE, GET_ALL_RECIPES } from "./actionNames";
 
 const getInitialState = () => ({
-  recipes: []
+  recipes: [],
 });
 
 const recipeReducer = (state = getInitialState(), action) => {
@@ -10,18 +10,18 @@ const recipeReducer = (state = getInitialState(), action) => {
       return {
         ...state,
         recipes: [
-          ...state.users, {
-            id: null,
+          ...state.users,
+          {
             title: action.fullName,
-            overview: action.email
-          }
-        ]
+            description: action.email,
+          },
+        ],
       };
     }
     case GET_ALL_RECIPES: {
       return {
         ...state,
-        recipes: action.data
+        recipes: action.data,
       };
     }
     default:

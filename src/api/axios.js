@@ -8,7 +8,10 @@ axios.interceptors.request.use((config) => {
   const token = storage.token.get();
   // console.log(config);
   // eslint-disable-next-line no-param-reassign
-  config.headers.Authorization = `Bearer ${token}`;
+  if (token) {
+    // eslint-disable-next-line no-param-reassign
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   // console.log("token: ",token)
   // console.log("config: ", config);
   return config;

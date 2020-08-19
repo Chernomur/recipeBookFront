@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { editUser, editImgUpload } from "api/userApi";
 
 import { updateUser } from "store/main/actions";
-import { Paper, TextField, Button, Avatar } from "@material-ui/core";
+import { Paper, TextField, Button, Avatar, Collapse } from "@material-ui/core";
 
 class EditProfile extends React.Component {
   constructor(props) {
@@ -41,20 +41,47 @@ class EditProfile extends React.Component {
     return null;
   }
 
+  passValidation = (password) => {
+    if (password.length < 3 || password.length > 50) {
+      return false;
+    }
+
+    return !password.includes(" ");
+  };
+
   updateUserInfo = async (event) => {
     event.preventDefault();
 
     this.setState({ errorMessage: null, errorField: null });
 
-    if (this.state.passwordConfirm !== this.state.newPassword) {
-      this.setState({ errorMessage: "Password mismatch" });
-      return;
+    if (
+      this.state.oldPassword ||
+      this.state.newPassword ||
+      this.state.passwordConfirm
+    ) {
+      if (this.state.passwordConfirm !== this.state.newPassword) {
+        this.setState({ errorMessage: "Password mismatch" });
+        return;
+      }
+
+      if (this.state.newPassword && !this.state.oldPassword) {
+        this.setState({ errorField: "newPassword" });
+        this.setState({ errorMessage: "input old Password" });
+        return;
+      }
+      if (!this.passValidation(this.state.oldPassword)) {
+        this.setState({ errorField: "oldPassword" });
+        this.setState({ errorMessage: "invalid password" });
+        return;
+      }
+
+      if (!this.passValidation(this.state.newPassword)) {
+        this.setState({ errorField: "newPassword" });
+        this.setState({ errorMessage: "invalid password" });
+        return;
+      }
     }
-    if (this.state.newPassword && !this.state.oldPassword) {
-      this.setState({ errorField: "newPassword" });
-      this.setState({ errorMessage: "input old Password" });
-      return;
-    }
+
     try {
       if (this.state.file) {
         await editImgUpload({ file: this.state.file });
@@ -118,6 +145,9 @@ class EditProfile extends React.Component {
         oldPassword: null,
         newPassword: null,
         passwordConfirm: null,
+
+        errorMessage: null,
+        errorField: null,
       },
       this.isRequiredHandler
     );
@@ -159,7 +189,7 @@ class EditProfile extends React.Component {
                   type="file"
                 />
 
-                <div>
+                <div className="user-info">
                   <TextField
                     label="Change Full Name"
                     error={this.state.errorField === "fullName"}
@@ -196,7 +226,8 @@ class EditProfile extends React.Component {
                     ? "non change password"
                     : "change password"}
                 </Button>
-                {this.state.changePassword && (
+
+                <Collapse in={this.state.changePassword}>
                   <div className="change-password">
                     <TextField
                       required={this.state.isRequired}
@@ -239,7 +270,7 @@ class EditProfile extends React.Component {
                       name="passwordConfirm"
                     />
                   </div>
-                )}
+                </Collapse>
 
                 <div className="buttons">
                   <Link className="button-link" to="/profile">
@@ -267,6 +298,10 @@ const EditProfileForm = styled.form`
     max-width: 700px;
   }
 
+  .input-file {
+    margin: 10px;
+  }
+
   .img-preview {
     margin: auto;
     width: 150px;
@@ -284,15 +319,23 @@ const EditProfileForm = styled.form`
   .show-password-butt {
     margin-bottom: 15px;
   }
+  .user-info div {
+    margin: 15px;
+  }
+
   .change-password {
     display: flex;
-    border-radius: 5px;
-    border: solid 1px lightcoral;
+    margin: 15px;
+    padding: 5px;
+  }
+  .change-password div {
+    padding-right: 10px;
   }
 
   .buttons {
     display: flex;
     justify-content: space-around;
+    margin: 15px;
   }
 
   .button-link {
@@ -301,10 +344,6 @@ const EditProfileForm = styled.form`
 
   .avatar {
     width: 150px;
-  }
-
-  div {
-    margin: 15px;
   }
 `;
 
