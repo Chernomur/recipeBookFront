@@ -10,8 +10,15 @@ export const editImgUpload = ({ file }) => {
     headers: { "Content-Type": "multipart/form-data" },
   });
 };
+export const allUsers = (arg) => {
+  const { currentPage, rowsCount, orderBy, order } = arg;
+  return axios.get(
+    `${path}/?orderby=${orderBy}&order=${order}&page=${currentPage}&size=${rowsCount}`
+  );
+};
 
 export default {
   editUser,
   editImgUpload,
+  allUsers,
 };

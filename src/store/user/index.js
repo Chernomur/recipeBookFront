@@ -1,11 +1,7 @@
-import { ADD_USER } from "./actionNames";
+import { ADD_USER, GET_ALL_USERS } from "./actionNames";
 
 const getInitialState = () => ({
-  users: [{
-    fullName: "Chernom-kun",
-    email: "chernomur@gfgsfg"
-  }]
-
+  users: [],
 });
 
 const userReducer = (state = getInitialState(), action) => {
@@ -14,12 +10,19 @@ const userReducer = (state = getInitialState(), action) => {
       return {
         ...state,
         users: [
-          ...state.users, {
+          ...state.users,
+          {
             id: null,
             fullName: action.fullName,
-            email: action.email
-          }
-        ]
+            email: action.email,
+          },
+        ],
+      };
+    }
+    case GET_ALL_USERS: {
+      return {
+        ...state,
+        users: action.data.users,
       };
     }
     default:

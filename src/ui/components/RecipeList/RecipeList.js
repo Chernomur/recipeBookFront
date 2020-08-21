@@ -9,7 +9,7 @@ import RecipeCard from "./RecipeCard";
 
 class RecipeList extends React.Component {
   async componentDidMount() {
-    await allRecipe().then((res) => {
+    allRecipe().then((res) => {
       this.props.GetAllRecipes(res);
     });
   }

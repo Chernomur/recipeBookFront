@@ -69,6 +69,15 @@ class Header extends React.Component {
                 </Link>
               )}
 
+              {this.props.user.role === "admin" && (
+                <Link className="button-link" to="/users">
+                  <Button>
+                    <AccountCircleIcon className="icon" />
+                    Users
+                  </Button>
+                </Link>
+              )}
+
               {this.props.user.id && (
                 <Button onClick={this.logOut}>
                   <ExitToAppIcon className="icon" />
