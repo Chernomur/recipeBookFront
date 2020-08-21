@@ -72,7 +72,7 @@ class Registration extends React.Component {
           <RegistrationForm onSubmit={this.registrationClick} className="card">
             <TextField
               error={this.state.errorField === "fullName"}
-              label="Login"
+              label="Full name"
               helperText={
                 this.state.errorField === "fullName"
                   ? this.state.errorMessage
