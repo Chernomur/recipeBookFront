@@ -4,15 +4,17 @@ import { Switch, Route } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import Profile from "./ui/components/Profile/Profile";
-import EditProfile from "./ui/components/Profile/EditProfile";
-import RecipeList from "./ui/components/RecipeList/RecipeList";
-import Registration from "./ui/components/Registration";
-import Login from "./ui/components/Login";
-import RedirectPage from "./RedirectPage";
-import UsersList from "./ui/components/UsersList/UsersList";
+import Recipe from "ui/pages/Recipe";
+import Profile from "ui/pages/Profile";
+import EditProfile from "ui/pages/EditProfile";
+import Recipes from "ui/pages/Recipes";
+import Registration from "ui/pages/Registration";
+import Login from "ui/pages/Login";
+import RedirectPage from "ui/pages/RedirectPage";
+import Users from "ui/pages/admin/Users";
+import CreateRecipe from "ui/pages/CreateRecipe";
 
-const RouterComponent = (props) => {
+const Router = (props) => {
   return (
     <>
       <Switch>
@@ -35,7 +37,7 @@ const RouterComponent = (props) => {
 
 const routes = [
   {
-    path: "/profile",
+    path: "/profile/:id?",
     component: Profile,
     forRegistered: true,
     forAdmin: false,
@@ -47,12 +49,23 @@ const routes = [
     forAdmin: false,
   },
   {
-    path: "/recipe-list",
-    component: RecipeList,
+    path: "/recipe/:id",
+    component: Recipe,
     forRegistered: true,
     forAdmin: false,
   },
-
+  {
+    path: "/recipe-list",
+    component: Recipes,
+    forRegistered: true,
+    forAdmin: false,
+  },
+  {
+    path: "/create-recipe",
+    component: CreateRecipe,
+    forRegistered: true,
+    forAdmin: false,
+  },
   {
     path: "/registration",
     component: Registration,
@@ -67,13 +80,13 @@ const routes = [
   },
   {
     path: "/users",
-    component: UsersList,
+    component: Users,
     forRegistered: true,
     forAdmin: true,
   },
 ];
 
-RouterComponent.propTypes = {
+Router.propTypes = {
   user: PropTypes.object.isRequired,
 };
 
@@ -81,4 +94,4 @@ const connectFunction = connect((state) => ({
   user: state.main.user,
 }));
 
-export default connectFunction(RouterComponent);
+export default connectFunction(Router);

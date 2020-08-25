@@ -1,10 +1,10 @@
-import { ADD_RECIPE, GET_ALL_RECIPES } from "./actionNames";
+import { ADD_RECIPE, UPDATE_ALL_RECIPES } from "./actionNames";
 
 export const addRecipe = (data) => ({
   type: ADD_RECIPE,
-  data
+  data,
 });
 export const GetAllRecipes = (data) => ({
-  type: GET_ALL_RECIPES,
-  data
+  type: UPDATE_ALL_RECIPES,
+  data,
 });

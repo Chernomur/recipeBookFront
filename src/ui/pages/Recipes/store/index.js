@@ -1,4 +1,4 @@
-import { ADD_RECIPE, GET_ALL_RECIPES } from "./actionNames";
+import { ADD_RECIPE, UPDATE_ALL_RECIPES } from "./actionNames";
 
 const getInitialState = () => ({
   recipes: [],
@@ -18,7 +18,7 @@ const recipeReducer = (state = getInitialState(), action) => {
         ],
       };
     }
-    case GET_ALL_RECIPES: {
+    case UPDATE_ALL_RECIPES: {
       return {
         ...state,
         recipes: action.data,

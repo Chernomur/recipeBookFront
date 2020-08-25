@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { GetAllUsers } from "store/user/actions";
+import { updateAllUsers } from "ui/pages/admin/Users/store/actions";
 import { allUsers } from "api/userApi";
 
 import Table from "@material-ui/core/Table";
@@ -14,15 +14,19 @@ import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import TablePagination from "@material-ui/core/TablePagination";
 import { TaskType } from "utils/types";
-import UserItem from "./UserItem";
+import UserItem from "./components/UserItem";
 
-class UsersList extends React.Component {
+class Users extends React.Component {
   state = {
     order: "asc", // desc
     orderBy: "id",
     currentPage: 0,
     rowsCount: 5,
     totalItems: 0,
+  };
+
+  clickOnUser = (id) => {
+    this.props.history.push(`/profile/${id}`);
   };
 
   getReqUsers = async () => {
@@ -34,7 +38,7 @@ class UsersList extends React.Component {
         order: this.state.order,
       });
 
-      this.props.GetAllUsers(res);
+      this.props.updateAllUsers(res);
 
       this.setState({
         totalItems: res.totalItems,
@@ -89,6 +93,7 @@ class UsersList extends React.Component {
                         : false
                     }
                   >
+                    {/* todo don't sort avatar */}
                     <TableSortLabel
                       active={this.state.orderBy === headCell.id}
                       direction={
@@ -106,7 +111,7 @@ class UsersList extends React.Component {
             </TableHead>
             <TableBody>
               {this.props.users.map(({ email, fullName, id, role, avatar }) => (
-                <TableRow key={id}>
+                <TableRow onClick={() => this.clickOnUser(id)} key={id}>
                   <UserItem
                     key={id}
                     email={email}
@@ -161,13 +166,14 @@ const connectFunction = connect(
     users: state.user.users,
   }),
   {
-    GetAllUsers,
+    updateAllUsers,
   }
 );
 
-UsersList.propTypes = {
+Users.propTypes = {
   users: PropTypes.arrayOf(TaskType).isRequired,
-  GetAllUsers: PropTypes.func.isRequired,
+  updateAllUsers: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
-export default connectFunction(UsersList);
+export default connectFunction(Users);

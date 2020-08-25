@@ -5,7 +5,13 @@ import PropTypes from "prop-types";
 
 const RedirectPage = (props) => {
   return (
-    <>{props.user.id ? <Redirect to="profile" /> : <Redirect to="login" />}</>
+    <>
+      {props.user.id ? (
+        <Redirect to={`profile/${props.user.id}`} />
+      ) : (
+        <Redirect to="/login" />
+      )}
+    </>
   );
 };
 

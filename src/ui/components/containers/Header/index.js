@@ -4,16 +4,15 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import InputAdornment from "@material-ui/core/InputAdornment";
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import AppBar from "@material-ui/core/AppBar";
 import { updateUser } from "store/main/actions";
-import SearchIcon from "@material-ui/icons/Search";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import PeopleIcon from "@material-ui/icons/People";
 import { storage } from "utils";
 
 class Header extends React.Component {
@@ -35,20 +34,12 @@ class Header extends React.Component {
               />
             </Link>
             {this.props.user.id && (
-              <TextField
-                className="search"
-                id="filled-textarea"
-                placeholder="Search"
-                variant="filled"
-                size="small"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">
-                      <SearchIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
+              <Link className="button-link" to="/create-recipe">
+                <Button>
+                  <AddCircleIcon className="icon" />
+                  Create recipes
+                </Button>
+              </Link>
             )}
             <Breadcrumbs aria-label="breadcrumb">
               {this.props.user.id && (
@@ -61,7 +52,10 @@ class Header extends React.Component {
               )}
 
               {this.props.user.id && (
-                <Link className="button-link" to="/profile">
+                <Link
+                  className="button-link"
+                  to={`/profile/${this.props.user.id}`}
+                >
                   <Button>
                     <AccountCircleIcon className="icon" />
                     Profile
@@ -72,7 +66,7 @@ class Header extends React.Component {
               {this.props.user.role === "admin" && (
                 <Link className="button-link" to="/users">
                   <Button>
-                    <AccountCircleIcon className="icon" />
+                    <PeopleIcon className="icon" />
                     Users
                   </Button>
                 </Link>
@@ -114,15 +108,6 @@ const StiledHeader = styled.header`
   .icon {
     width: 20;
     height: 20;
-  }
-
-  .search {
-    width: 250px;
-  }
-
-  .search input {
-    margin-bottom: 15px;
-    font-size: 25px;
   }
 
   .header {

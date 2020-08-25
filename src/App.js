@@ -2,11 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import Header from "./ui/components/Header";
+import Header from "./ui/components/containers/Header";
 
 import { authCheck } from "./api/authApi";
 import { updateUser } from "./store/main/actions";
-import RouterComponent from "./RouterComponent";
+import Router from "./ui/Router";
 
 class App extends React.Component {
   constructor(props) {
@@ -33,7 +33,7 @@ class App extends React.Component {
         ) : (
           <>
             <Header />
-            <RouterComponent />
+            <Router />
           </>
         )}
       </>

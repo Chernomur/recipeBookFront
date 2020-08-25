@@ -77,7 +77,6 @@ class Login extends React.Component {
               type="submit"
               value="login"
             >
-              {" "}
               login
             </Button>
             <NavLink className="reg-link" to={"registration"}>

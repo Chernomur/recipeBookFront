@@ -98,7 +98,7 @@ class EditProfile extends React.Component {
 
       this.setState({ errorMessage: "change completed" });
       // eslint-disable-next-line react/prop-types
-      this.props.history.push("/profile");
+      this.props.history.push(`/profile/${this.props.user.id}`);
     } catch (e) {
       // console.log(e);
       this.setState({ errorMessage: e.response.data.message });
