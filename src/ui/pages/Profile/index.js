@@ -5,6 +5,8 @@ import PropTypes from "prop-types";
 import { Paper, Button, Avatar } from "@material-ui/core";
 import { Link, withRouter } from "react-router-dom";
 import { getUser } from "api/userApi";
+import defaultAvatar from "public/userDefault.webp";
+
 import { updateUser } from "ui/pages/Profile/store/actions";
 
 class Profile extends React.Component {
@@ -53,7 +55,12 @@ class Profile extends React.Component {
     return (
       <StyledProfilePage>
         <Paper className="paper" elevation={3}>
-          <Avatar className="avatar" src={this.state.user.avatar}></Avatar>
+          <Avatar
+            className="avatar"
+            src={
+              this.state.user.avatar ? this.state.user.avatar : defaultAvatar
+            }
+          ></Avatar>
 
           <div>
             <div>

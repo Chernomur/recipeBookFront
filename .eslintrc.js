@@ -37,7 +37,7 @@ module.exports = {
     "no-plusplus": "off",
     "operator-linebreak": "off",
     "comma-dangle": "off",
-    "no-console": ["error", { allow: ["warn", "error"] }],
+    //"no-console": ["error", { allow: ["warn", "error"] }],
     "prefer-destructuring": "off",
     "arrow-parens": ["error", "always"],
     "arrow-body-style": "off",

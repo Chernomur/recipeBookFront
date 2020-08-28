@@ -5,8 +5,10 @@ const path = "/user";
 export const editUser = (id, data) => {
   return axios.patch(`${path}/${id}`, data);
 };
-export const editImgUpload = ({ file }) => {
-  return axios.post(`${path}/upload`, file, {
+export const editImgUpload = (file) => {
+  const fd = new FormData();
+  fd.append("filedata", file);
+  return axios.post(`${path}/upload`, fd, {
     headers: { "Content-Type": "multipart/form-data" },
   });
 };

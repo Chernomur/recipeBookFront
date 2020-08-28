@@ -13,13 +13,13 @@ axios.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${token}`;
   }
   // console.log("token: ",token)
-  // console.log("config: ", config);
+  console.log("config: ", config);
   return config;
 });
 
 axios.interceptors.response.use(
   ({ data }) => {
-    // console.log("response", data);
+    console.log("response", data);
     return data;
   },
   (error) => {

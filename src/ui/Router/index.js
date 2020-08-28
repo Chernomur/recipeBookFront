@@ -7,12 +7,14 @@ import PropTypes from "prop-types";
 import Recipe from "ui/pages/Recipe";
 import Profile from "ui/pages/Profile";
 import EditProfile from "ui/pages/EditProfile";
+import EditRecipe from "ui/pages/EditRecipe";
 import Recipes from "ui/pages/Recipes";
 import Registration from "ui/pages/Registration";
 import Login from "ui/pages/Login";
 import RedirectPage from "ui/pages/RedirectPage";
 import Users from "ui/pages/admin/Users";
 import CreateRecipe from "ui/pages/CreateRecipe";
+import Favorite from "ui/pages/Favorite";
 
 const Router = (props) => {
   return (
@@ -55,8 +57,20 @@ const routes = [
     forAdmin: false,
   },
   {
+    path: "/edit-recipe/:id",
+    component: EditRecipe,
+    forRegistered: true,
+    forAdmin: false,
+  },
+  {
     path: "/recipe-list",
     component: Recipes,
+    forRegistered: true,
+    forAdmin: false,
+  },
+  {
+    path: "/favorites",
+    component: Favorite,
     forRegistered: true,
     forAdmin: false,
   },

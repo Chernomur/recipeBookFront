@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import RecipeCard from "./components/RecipeCard";
 import Filters from "./components/Filters";
 
-class RecipeList extends React.Component {
+class Favorite extends React.Component {
   clickOnRecipe = (id) => {
     this.props.history.push(`/recipe/${id}`);
   };
@@ -16,7 +16,7 @@ class RecipeList extends React.Component {
     return (
       <>
         <Filters />
-        <StyledRecipeListContainer>
+        <StyledFavoriteContainer>
           {this.props.recipes.map(
             ({ id, title, description, difficulty, cookingTime, image }) => (
               <RecipeCard
@@ -31,13 +31,13 @@ class RecipeList extends React.Component {
               ></RecipeCard>
             )
           )}
-        </StyledRecipeListContainer>
+        </StyledFavoriteContainer>
       </>
     );
   }
 }
 
-const StyledRecipeListContainer = styled.div`
+const StyledFavoriteContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -54,9 +54,9 @@ const connectFunction = connect(
   }
 );
 
-RecipeList.propTypes = {
+Favorite.propTypes = {
   recipes: PropTypes.arrayOf(TaskType).isRequired,
   history: PropTypes.object.isRequired,
 };
 
-export default connectFunction(RecipeList);
+export default connectFunction(Favorite);

@@ -8,6 +8,7 @@ import { editUser, editImgUpload } from "api/userApi";
 
 import { updateUser } from "store/main/actions";
 import { Paper, TextField, Button, Avatar, Collapse } from "@material-ui/core";
+import defaultAvatar from "public/userDefault.webp";
 
 class EditProfile extends React.Component {
   constructor(props) {
@@ -84,7 +85,7 @@ class EditProfile extends React.Component {
 
     try {
       if (this.state.file) {
-        await editImgUpload({ file: this.state.file });
+        await editImgUpload(this.state.file);
       }
 
       const response = await editUser(this.props.user.id, {
@@ -107,12 +108,10 @@ class EditProfile extends React.Component {
   };
 
   inputFileHandler = async (event) => {
-    const fd = new FormData();
-    fd.append("filedata", event.target.files[0]);
-
-    this.setState({ fileURL: URL.createObjectURL(event.target.files[0]) });
-
-    this.setState({ file: fd });
+    this.setState({
+      fileURL: URL.createObjectURL(event.target.files[0]),
+      file: event.target.files[0],
+    });
   };
 
   isRequiredHandler = () => {
@@ -172,7 +171,12 @@ class EditProfile extends React.Component {
                 <div className="preview">
                   <Avatar
                     className="img-preview"
-                    src={this.state.fileURL || this.props.user.avatar}
+                    src={
+                      this.state.fileURL ||
+                      (this.props.user.avatar
+                        ? this.props.user.avatar
+                        : defaultAvatar)
+                    }
                   />
                 </div>
                 <div className="file-error">

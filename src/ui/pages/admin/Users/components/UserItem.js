@@ -2,8 +2,8 @@ import React from "react";
 
 import TableCell from "@material-ui/core/TableCell";
 import { Avatar } from "@material-ui/core";
-
 import PropTypes from "prop-types";
+import defaultAvatar from "public/userDefault.webp";
 
 const UserItem = ({ email, fullName, id, role, avatar }) => {
   return (
@@ -11,9 +11,12 @@ const UserItem = ({ email, fullName, id, role, avatar }) => {
       <TableCell component="th">{id}</TableCell>
       <TableCell component="th">{fullName}</TableCell>
       <TableCell component="th">{email}</TableCell>
-      <TableCell component="th">{role}</TableCell>
       <TableCell component="th">
-        <Avatar src={avatar}></Avatar>
+        {role}
+        {avatar} i
+      </TableCell>
+      <TableCell component="th">
+        <Avatar src={avatar ? avatar : defaultAvatar}></Avatar>
       </TableCell>
     </>
   );

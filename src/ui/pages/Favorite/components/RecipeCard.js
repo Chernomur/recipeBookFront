@@ -25,7 +25,7 @@ const RecipeCard = ({
       <Card elevation={5} className="root">
         <CardMedia
           onClick={onClick}
-          image={image ? image : defaultImg}
+          image={image || defaultImg}
           className="media"
         />
 
