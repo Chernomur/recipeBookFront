@@ -55,6 +55,7 @@ class Profile extends React.Component {
     return (
       <StyledProfilePage>
         <Paper className="paper" elevation={3}>
+
           <Avatar
             className="avatar"
             src={
@@ -106,7 +107,7 @@ const StyledProfilePage = styled.div`
 const connectFunction = connect(
   (state) => ({
     currentUser: state.user.currentUser,
-    user: state.main.user,
+    user: state.main.user
   }),
   { updateUser }
 );
@@ -114,7 +115,7 @@ const connectFunction = connect(
 Profile.propTypes = {
   user: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired
 };
 
 withRouter(Profile);

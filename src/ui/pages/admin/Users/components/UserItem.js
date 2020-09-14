@@ -11,12 +11,9 @@ const UserItem = ({ email, fullName, id, role, avatar }) => {
       <TableCell component="th">{id}</TableCell>
       <TableCell component="th">{fullName}</TableCell>
       <TableCell component="th">{email}</TableCell>
+      <TableCell component="th">{role}</TableCell>
       <TableCell component="th">
-        {role}
-        {avatar} i
-      </TableCell>
-      <TableCell component="th">
-        <Avatar src={avatar ? avatar : defaultAvatar}></Avatar>
+        <Avatar src={avatar || defaultAvatar}></Avatar>
       </TableCell>
     </>
   );
@@ -27,7 +24,7 @@ UserItem.propTypes = {
   fullName: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   role: PropTypes.string.isRequired,
-  avatar: PropTypes.string.isRequired,
+  avatar: PropTypes.string.isRequired
 };
 
 export default UserItem;

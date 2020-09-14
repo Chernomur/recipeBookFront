@@ -9,7 +9,7 @@ export const editImgUpload = (file) => {
   const fd = new FormData();
   fd.append("filedata", file);
   return axios.post(`${path}/upload`, fd, {
-    headers: { "Content-Type": "multipart/form-data" },
+    headers: { "Content-Type": "multipart/form-data" }
   });
 };
 export const getUser = (id) => {
@@ -23,9 +23,20 @@ export const allUsers = (arg) => {
   );
 };
 
+export const toFavorites = (id) => {
+  return axios.post(`${path}/favorite`, id);
+};
+
+export const delFavorite = (id) => {
+  // console.log(id);
+  return axios.delete(`${path}/favorite/${id}`);
+};
+
 export default {
   editUser,
   editImgUpload,
   getUser,
   allUsers,
+  toFavorites,
+  delFavorite
 };

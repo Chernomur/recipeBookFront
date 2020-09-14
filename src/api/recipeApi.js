@@ -43,8 +43,8 @@ export const allRecipes = (arg) => {
       timeTo,
       search,
       sortField,
-      sortOrder,
-    },
+      sortOrder
+    }
   });
 };
 
@@ -59,8 +59,8 @@ export const favoriteRecipes = (arg) => {
       timeTo,
       search,
       sortField,
-      sortOrder,
-    },
+      sortOrder
+    }
   });
 };
 
@@ -70,7 +70,7 @@ export const createRecipe = (data) => {
   Object.keys(data).forEach((key) => formData.append(key, data[key]));
 
   return axios.post(`${path}/`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
+    headers: { "Content-Type": "multipart/form-data" }
   });
 };
 
@@ -83,7 +83,7 @@ export const editImgUpload = (id, file) => {
   fd.append("id", id);
 
   return axios.post(`${path}/upload`, fd, {
-    headers: { "Content-Type": "multipart/form-data" },
+    headers: { "Content-Type": "multipart/form-data" }
   });
 };
 
@@ -97,5 +97,5 @@ export default {
   getRecipe,
   editRecipe,
   editImgUpload,
-  favoriteRecipes,
+  favoriteRecipes
 };

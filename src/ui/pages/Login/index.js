@@ -15,7 +15,7 @@ class Login extends React.Component {
     email: "",
     password: "",
     errorMessage: null,
-    errorField: null,
+    errorField: null
   };
 
   singInClick = async (event) => {
@@ -23,7 +23,7 @@ class Login extends React.Component {
     try {
       const response = await singIn({
         email: this.state.email,
-        password: this.state.password,
+        password: this.state.password
       });
       this.setState({ errorMessage: "Login complete" });
       storage.token.set(response.token);
@@ -106,12 +106,12 @@ const LoginForm = styled.form`
 `;
 
 Login.propTypes = {
-  updateUser: PropTypes.func.isRequired,
+  updateUser: PropTypes.func.isRequired
 };
 
 const connectFunction = connect(
   (state) => ({
-    user: state.main.user,
+    user: state.main.user
   }),
   { updateUser }
 );

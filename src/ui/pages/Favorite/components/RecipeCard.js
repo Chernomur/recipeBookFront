@@ -1,55 +1,79 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import StarBorderIcon from "@material-ui/icons/StarBorder";
-import CardContent from "@material-ui/core/CardContent";
 import ShareIcon from "@material-ui/icons/Share";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
 import defaultImg from "public/defaultDish.png";
+import { delFavorite, toFavorites } from "api/userApi";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+import CardActions from "@material-ui/core/CardActions";
+import IconButton from "@material-ui/core/IconButton";
+import Card from "@material-ui/core/Card";
+import StarIcon from "@material-ui/icons/Star";
+import StarBorderIcon from "@material-ui/icons/StarBorder";
 
 import CardMedia from "@material-ui/core/CardMedia";
 
-const RecipeCard = ({
-  onClick,
-  title,
-  description,
-  difficulty,
-  cookingTime,
-  image,
-}) => {
-  return (
-    <StyledRecipeCard>
-      <Card elevation={5} className="root">
-        <CardMedia
-          onClick={onClick}
-          image={image || defaultImg}
-          className="media"
-        />
+class RecipeCard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isInFavorite: true
+    };
+  }
 
-        <CardContent className="description">
-          <Typography noWrap variant="h5">
-            {title}
-          </Typography>
-          <Typography className="text">{description}</Typography>
-        </CardContent>
+  addToFavorites = async () => {
+    await toFavorites({ id: this.props.id });
+    this.setState({ isInFavorite: true });
+  };
 
-        <CardActions disableSpacing className="actions">
-          <IconButton aria-label="add to favorites">
-            <StarBorderIcon size="large" />
-          </IconButton>
-          <Typography>{difficulty} </Typography>
-          <Typography>{cookingTime} min.</Typography>
-          <IconButton aria-label="share">
-            <ShareIcon />
-          </IconButton>
-        </CardActions>
-      </Card>
-    </StyledRecipeCard>
-  );
-};
+  delFromFavorite = async () => {
+    await delFavorite(this.props.id);
+    this.setState({ isInFavorite: false });
+  };
+
+  render() {
+    return (
+
+      <StyledRecipeCard>
+        <Card elevation={5} className="root">
+          <CardMedia
+            component="img"
+
+            onClick={this.props.onClick}
+            image={this.props.image || defaultImg}
+            className="media"
+          />
+
+          <CardContent className="description">
+            <Typography noWrap variant="h5">
+              {this.props.title}
+            </Typography>
+            <Typography className="text">{this.props.description}</Typography>
+          </CardContent>
+
+          <CardActions disableSpacing className="actions">
+            {this.state.isInFavorite ?
+              <IconButton onClick={this.delFromFavorite} aria-label="add to favorites">
+                <StarIcon size="large" />
+              </IconButton>
+              :
+              <IconButton onClick={this.addToFavorites} aria-label="add to favorites">
+                <StarBorderIcon size="large" />
+              </IconButton>
+            }
+
+            <Typography>{this.props.difficulty} </Typography>
+            <Typography>{this.props.cookingTime} min.</Typography>
+            <IconButton aria-label="share">
+              <ShareIcon />
+            </IconButton>
+          </CardActions>
+        </Card>
+      </StyledRecipeCard>
+    );
+  }
+}
 
 const StyledRecipeCard = styled.div`
   .root {
@@ -85,8 +109,13 @@ RecipeCard.propTypes = {
   description: PropTypes.string.isRequired,
   difficulty: PropTypes.string.isRequired,
   cookingTime: PropTypes.number.isRequired,
-  image: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
+  image: PropTypes.string,
+  id: PropTypes.number.isRequired,
+  onClick: PropTypes.func.isRequired
+};
+
+RecipeCard.defaultProps = {
+  image: null
 };
 
 export default RecipeCard;

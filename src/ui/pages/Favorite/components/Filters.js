@@ -20,11 +20,11 @@ class Filters extends React.Component {
     sortValue: "",
     search: "",
     slider: [10, 120],
-    difficulty: "",
+    difficulty: ""
   };
 
   async componentDidMount() {
-    this.getReqRecipes();
+    await this.getReqRecipes();
   }
 
   async getReqRecipes() {
@@ -34,10 +34,14 @@ class Filters extends React.Component {
         timeTo: this.state.slider[1],
         difficulty: this.state.difficulty,
         sorting: this.state.sortValue,
-        search: this.state.search,
+        search: this.state.search
       });
 
-      this.props.GetAllRecipes(res.Recipes);
+      if (res) {
+        this.props.GetAllRecipes(res.Recipes);
+      } else {
+        this.props.GetAllRecipes([]);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -146,6 +150,7 @@ class Filters extends React.Component {
     );
   }
 }
+
 const StyledFilter = styled.div`
   display: grid;
   grid-template-rows: 1fr;
@@ -163,15 +168,15 @@ const StyledFilter = styled.div`
 `;
 const connectFunction = connect(
   (state) => ({
-    recipes: state.recipe.recipes,
+    recipes: state.recipe.recipes
   }),
   {
-    GetAllRecipes,
+    GetAllRecipes
   }
 );
 
 Filters.propTypes = {
-  GetAllRecipes: PropTypes.func.isRequired,
+  GetAllRecipes: PropTypes.func.isRequired
 };
 
 export default connectFunction(Filters);

@@ -18,7 +18,7 @@ class RecipeList extends React.Component {
         <Filters />
         <StyledRecipeListContainer>
           {this.props.recipes.map(
-            ({ id, title, description, difficulty, cookingTime, image }) => (
+            ({ id, title, description, difficulty, cookingTime, image, Users }) => (
               <RecipeCard
                 onClick={() => this.clickOnRecipe(id)}
                 key={id}
@@ -28,6 +28,7 @@ class RecipeList extends React.Component {
                 difficulty={difficulty}
                 cookingTime={cookingTime}
                 image={image}
+                users={Users}
               ></RecipeCard>
             )
           )}
@@ -47,16 +48,16 @@ const StyledRecipeListContainer = styled.div`
 
 const connectFunction = connect(
   (state) => ({
-    recipes: state.recipe.recipes,
+    recipes: state.recipe.recipes
   }),
   {
-    GetAllRecipes,
+    GetAllRecipes
   }
 );
 
 RecipeList.propTypes = {
   recipes: PropTypes.arrayOf(TaskType).isRequired,
-  history: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired
 };
 
 export default connectFunction(RecipeList);

@@ -43,7 +43,7 @@ class Header extends React.Component {
             )}
             <Breadcrumbs aria-label="breadcrumb">
               {this.props.user.id && (
-                <Link className="button-link" to="/recipe-list">
+                <Link className="button-link" to="/favorites">
                   <Button>
                     <FavoriteIcon className="icon" />
                     Favorite
@@ -131,16 +131,16 @@ const StiledHeader = styled.header`
 
 const connectFunction = connect(
   (state) => ({
-    user: state.main.user,
+    user: state.main.user
   }),
   {
-    updateUser,
+    updateUser
   }
 );
 
 Header.propTypes = {
   user: PropTypes.object.isRequired,
-  updateUser: PropTypes.func.isRequired,
+  updateUser: PropTypes.func.isRequired
 };
 
 export default connectFunction(Header);
